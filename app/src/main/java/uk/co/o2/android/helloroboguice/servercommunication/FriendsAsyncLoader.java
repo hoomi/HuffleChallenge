@@ -1,0 +1,105 @@
+package uk.co.o2.android.helloroboguice.servercommunication;
+
+import android.content.Context;
+import android.net.http.AndroidHttpClient;
+import android.support.v4.content.AsyncTaskLoader;
+import android.text.TextUtils;
+import android.util.Log;
+
+import com.google.gson.Gson;
+import com.google.inject.Inject;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.params.HttpClientParams;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.params.HttpProtocolParams;
+import org.apache.http.util.EntityUtils;
+
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+
+import roboguice.RoboGuice;
+import uk.co.o2.android.helloroboguice.HuddleApplication;
+import uk.co.o2.android.helloroboguice.model.Huddle;
+import uk.co.o2.android.helloroboguice.utils.Constants;
+import uk.co.o2.android.helloroboguice.utils.Logger;
+
+/**
+ * Created by hostova1 on 08/08/2014.
+ */
+public class FriendsAsyncLoader extends AsyncTaskLoader<Huddle> {
+
+    @Inject
+    private Gson gson;
+
+    private static final int CONNECTION_TIMEOUT = 3000;
+    private static final int SOCKET_TIMEOUT = 3000;
+
+
+    private String serverUrl;
+    private String itemId;
+
+    public FriendsAsyncLoader(Context context) {
+        super(context);
+        RoboGuice.getInjector(context).injectMembers(this);
+    }
+
+    public void setServerUrl(String serverUrl) {
+        this.serverUrl = serverUrl;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
+    }
+
+    @Override
+    public Huddle loadInBackground() {
+        Huddle huddle = null;
+        if (TextUtils.isEmpty(serverUrl) || TextUtils.isEmpty(itemId)) {
+            return null;
+        }
+        AndroidHttpClient client = AndroidHttpClient.newInstance("Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_0 like Mac OS X; en-us) AppleWebKit/528.18 (KHTML, like Gecko) Version/4.0 Mobile/7A341 Safari/528.16", getContext());
+        HttpGet httpGet = new HttpGet(addParamsToUrl(serverUrl));
+        try {
+            HttpResponse response = client.execute(httpGet);
+            int status = response.getStatusLine().getStatusCode();
+            Logger.d(this, "Status code: " + status);
+            if (status == HttpStatus.SC_OK) {
+                String jsonString = EntityUtils.toString(response.getEntity());
+                Logger.d(this, "json: " + jsonString);
+                huddle = gson.fromJson(jsonString, Huddle.class);
+            } else {
+                Logger.e(this, response.getStatusLine().getReasonPhrase());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return huddle;
+    }
+
+    protected String addParamsToUrl(String url) {
+        if (!url.endsWith("?"))
+            url += "?";
+
+        List<NameValuePair> params = new LinkedList<NameValuePair>();
+        params.add(new BasicNameValuePair("app-id", "cos-iphone"));
+        params.add(new BasicNameValuePair("app-version", "3.2TA"));
+        params.add(new BasicNameValuePair("app-platform", "iphone"));
+        params.add(new BasicNameValuePair("auth-fanatix-id", Constants.TEST_AUTH_ID));
+        params.add(new BasicNameValuePair("auth-fanatix-token", Constants.TEST_AUTH_TOKEN));
+        params.add(new BasicNameValuePair("itemid", itemId));
+        params.add(new BasicNameValuePair("include-all", "true"));
+        String paramString = URLEncodedUtils.format(params, "utf-8");
+        url += paramString;
+        Logger.d(this,"url is: " + url);
+        return url;
+    }
+}

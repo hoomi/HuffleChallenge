@@ -4,6 +4,10 @@ package uk.co.o2.android.helloroboguice.fragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
+import roboguice.event.Observes;
+import uk.co.o2.android.helloroboguice.model.Huddle;
+import uk.co.o2.android.helloroboguice.utils.Logger;
+
 
 /**
  * A simple {@link Fragment} subclass.
