@@ -81,6 +81,9 @@ public class FriendsAsyncLoader extends AsyncTaskLoader<Huddle> {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            client.close();
+            client = null;
         }
         return huddle;
     }

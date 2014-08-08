@@ -1,6 +1,7 @@
 package uk.co.o2.android.helloroboguice.fragments;
 
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 
 import com.google.inject.Inject;
 

@@ -14,6 +14,7 @@ import roboguice.activity.RoboActionBarActivity;
 import roboguice.event.EventManager;
 import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
+import uk.co.o2.android.helloroboguice.events.HuddleRequestEvent;
 import uk.co.o2.android.helloroboguice.fragments.AllFriendsFragment;
 import uk.co.o2.android.helloroboguice.fragments.BaseFragment;
 import uk.co.o2.android.helloroboguice.fragments.RecommendedFragment;
@@ -33,6 +34,10 @@ public class MyActivity extends RoboActionBarActivity implements LoaderManager.L
     protected EventManager eventManager;
 
     private Huddle globalHuddle;
+
+    public Huddle getGlobalHuddle() {
+        return globalHuddle;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +83,7 @@ public class MyActivity extends RoboActionBarActivity implements LoaderManager.L
         FriendsAsyncLoader friendsAsyncLoader = new FriendsAsyncLoader(this);
         friendsAsyncLoader.setServerUrl(Constants.SERVER_URL);
         friendsAsyncLoader.setItemId("27149164");
+        eventManager.fire(new HuddleRequestEvent());
         return friendsAsyncLoader;
     }
 
@@ -94,6 +100,7 @@ public class MyActivity extends RoboActionBarActivity implements LoaderManager.L
         FriendsAsyncLoader friendsAsyncLoader = (FriendsAsyncLoader) huddleLoader;
         friendsAsyncLoader.setServerUrl(Constants.SERVER_URL);
         friendsAsyncLoader.setItemId("27149164");
+        eventManager.fire(new HuddleRequestEvent());
     }
 
     public class FriendTabListener implements ActionBar.TabListener {

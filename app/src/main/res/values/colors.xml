@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="grey">#999999</color>
+    <color name="grey_chat">#555555</color>
+    <color name="green">#00BB00</color>
+</resources>

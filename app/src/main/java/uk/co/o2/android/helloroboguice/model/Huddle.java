@@ -12,10 +12,3 @@ public class Huddle {
     public List<Friend> other;
     public List<Friend> all;
 }
-
-class Friend {
-    public String id;
-    public String image;
-    public String name;
-    public int primary;
-}

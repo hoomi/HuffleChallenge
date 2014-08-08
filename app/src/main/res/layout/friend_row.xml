@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:minHeight="150dp">
+
+    <CheckBox
+        android:id="@+id/selected_CheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <ImageView
+        android:id="@+id/profile_ImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_toEndOf="@+id/selected_CheckBox"
+        android:layout_toRightOf="@+id/selected_CheckBox"
+        android:contentDescription="@string/profileImage_ContentDescription" />
+
+    <TextView
+        android:id="@+id/name_TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/profile_ImageView"
+        android:layout_toRightOf="@+id/profile_ImageView"
+        android:layout_toLeftOf="@+id/chatIndicator_ImageView"
+        android:layout_toStartOf="@+id/chatIndicator_ImageView"
+        android:maxLines="1"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/like_TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/name_TextView"
+
+        android:layout_toLeftOf="@+id/chatIndicator_ImageView"
+        android:layout_toStartOf="@+id/chatIndicator_ImageView"
+        android:layout_alignLeft="@+id/name_TextView"
+        android:layout_alignStart="@+id/name_TextView"
+        android:maxLines="1"
+        android:textColor="@color/grey" />
+
+    <ImageView
+        android:id="@+id/chatIndicator_ImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:contentDescription="@string/chatIndicator_ContentDescription"
+        android:src="@drawable/chat_unavailable"
+        android:scaleType="center"
+        />
+
+</RelativeLayout>
