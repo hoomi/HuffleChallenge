@@ -8,6 +8,7 @@ import java.util.List;
 public class Huddle {
     public String uid;
     public String version;
+    public String likeString;
     public List<Friend> recommended;
     public List<Friend> other;
     public List<Friend> all;

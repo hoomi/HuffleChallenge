@@ -35,10 +35,6 @@ public class FriendsAsyncLoader extends AsyncTaskLoader<Huddle> {
     @Inject
     private Gson gson;
 
-    private static final int CONNECTION_TIMEOUT = 3000;
-    private static final int SOCKET_TIMEOUT = 3000;
-
-
     private String serverUrl;
     private String itemId;
 
@@ -73,6 +69,7 @@ public class FriendsAsyncLoader extends AsyncTaskLoader<Huddle> {
                 huddle = gson.fromJson(jsonString, Huddle.class);
             } else {
                 Logger.e(this, response.getStatusLine().getReasonPhrase());
+                huddle = gson.fromJson(Constants.TEST_JSON, Huddle.class);
             }
         } catch (IOException e) {
             e.printStackTrace();
