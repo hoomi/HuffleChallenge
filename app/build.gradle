@@ -5,7 +5,7 @@ android {
     buildToolsVersion "20.0.0"
 
     defaultConfig {
-        applicationId "uk.co.o2.android.helloroboguice"
+        applicationId "com.github.hooman.ostovari.huddle"
         minSdkVersion 8
         targetSdkVersion 20
         versionCode 1
