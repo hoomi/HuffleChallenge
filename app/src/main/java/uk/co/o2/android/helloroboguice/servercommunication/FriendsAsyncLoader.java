@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.http.AndroidHttpClient;
 import android.support.v4.content.AsyncTaskLoader;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.inject.Inject;
@@ -13,21 +12,17 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import roboguice.RoboGuice;
-import uk.co.o2.android.helloroboguice.HuddleApplication;
+import uk.co.o2.android.helloroboguice.model.Friend;
 import uk.co.o2.android.helloroboguice.model.Huddle;
 import uk.co.o2.android.helloroboguice.utils.Constants;
 import uk.co.o2.android.helloroboguice.utils.Logger;
@@ -83,9 +78,33 @@ public class FriendsAsyncLoader extends AsyncTaskLoader<Huddle> {
             e.printStackTrace();
         } finally {
             client.close();
-            client = null;
         }
+//        if (huddle == null) {
+//            huddle = createTestHuddle();
+//        }
         return huddle;
+    }
+
+    private Huddle createTestHuddle() {
+        Huddle testHuddle = new Huddle();
+        testHuddle.recommended = new ArrayList<Friend>();
+        testHuddle.all = new ArrayList<Friend>();
+        testHuddle.other = new ArrayList<Friend>();
+        Friend friend;
+        for (int i = 0; i<30 ; i ++) {
+            friend = new Friend();
+            friend.id = i + "";
+            friend.image = "http://www.gq.com/style/blogs/the-gq-eye/Jim-Carrey-Morning-Shot-96.jpg";
+            friend.name = "Jim Carrey " + i;
+            friend.primary = i % 2;
+            if (i % 3 == 0) {
+                testHuddle.recommended.add(friend);
+            } else {
+                testHuddle.other.add(friend);
+            }
+            testHuddle.all.add(friend);
+        }
+        return testHuddle;
     }
 
     protected String addParamsToUrl(String url) {

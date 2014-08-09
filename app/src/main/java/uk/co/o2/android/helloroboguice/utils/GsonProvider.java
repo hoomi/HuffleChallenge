@@ -8,12 +8,8 @@ import com.google.inject.Provider;
  */
 public class GsonProvider implements Provider<Gson> {
 
-    private static Gson GSON;
     @Override
-    public synchronized Gson get() {
-        if (GSON == null) {
-            GSON = new Gson();
-        }
-        return GSON;
+    public Gson get() {
+        return new Gson();
     }
 }

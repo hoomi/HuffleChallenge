@@ -34,7 +34,18 @@ public class AllFriendsFragment extends BaseListFragment {
         } else {
             friendList = huddle.all;
         }
-        setListAdapter(new FriendsArrayAdapter(getActivity(), R.layout.friend_row, friendList));
+        FriendsArrayAdapter friendsArrayAdapter = new FriendsArrayAdapter(getActivity(), R.layout.friend_row, friendList);
+        friendsArrayAdapter.setOnNumberOfSelectionChanged(((MyActivity)getActivity()).getOnNumberOfSelectionChanged());
+        setListAdapter(friendsArrayAdapter);
+
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    protected void huddleUpdated(@Observes Huddle huddle) {
+        if (huddle != null) {
+            ((FriendsArrayAdapter)getListAdapter()).setFriends(huddle.all);
+        }
+        super.huddleUpdated(huddle);
     }
 }

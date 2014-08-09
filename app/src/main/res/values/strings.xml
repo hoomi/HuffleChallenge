@@ -16,4 +16,6 @@
     </string-array>
 
     <string name="empty_friends">Empty Friend List</string>
+    <string name="backButton_ContentDescription">Back button</string>
+    <string name="create">Create</string>
 </resources>

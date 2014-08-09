@@ -13,6 +13,7 @@ import uk.co.o2.android.helloroboguice.R;
 import uk.co.o2.android.helloroboguice.fragments.AllFriendsFragment;
 import uk.co.o2.android.helloroboguice.fragments.BaseFragment;
 import uk.co.o2.android.helloroboguice.fragments.BaseListFragment;
+import uk.co.o2.android.helloroboguice.fragments.OtherFriendsFragment;
 import uk.co.o2.android.helloroboguice.fragments.RecommendedFragment;
 
 /**
@@ -42,7 +43,8 @@ public class FriendsPagerAdapter extends FragmentPagerAdapter {
                     fragment = BaseListFragment.newInstance(RecommendedFragment.class, null);
                     break;
                 case 1:
-                    fragment = BaseListFragment.newInstance(RecommendedFragment.class, null);
+                    fragment = BaseListFragment.newInstance(OtherFriendsFragment.class, null);
+                    break;
                 default:
                     fragment = BaseListFragment.newInstance(AllFriendsFragment.class, null);
                     break;

@@ -25,4 +25,5 @@ dependencies {
     compile 'org.roboguice:roboguice:3.0-alpha-2'
     compile 'com.android.support:support-v4:20.0.0'
     compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.novoda.imageloader:imageloader-core:1.6.1'
 }

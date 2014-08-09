@@ -1,37 +1,56 @@
 package uk.co.o2.android.helloroboguice;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.google.inject.Inject;
+import com.novoda.imageloader.core.ImageManager;
+import com.novoda.imageloader.core.model.ImageTagFactory;
 
+import java.util.ArrayList;
+
+import roboguice.RoboGuice;
 import roboguice.activity.RoboActionBarActivity;
 import roboguice.event.EventManager;
 import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 import uk.co.o2.android.helloroboguice.events.HuddleRequestEvent;
-import uk.co.o2.android.helloroboguice.fragments.AllFriendsFragment;
-import uk.co.o2.android.helloroboguice.fragments.BaseFragment;
-import uk.co.o2.android.helloroboguice.fragments.RecommendedFragment;
+import uk.co.o2.android.helloroboguice.model.Friend;
 import uk.co.o2.android.helloroboguice.model.Huddle;
 import uk.co.o2.android.helloroboguice.servercommunication.FriendsAsyncLoader;
+import uk.co.o2.android.helloroboguice.ui.FriendsArrayAdapter;
 import uk.co.o2.android.helloroboguice.ui.FriendsPagerAdapter;
+import uk.co.o2.android.helloroboguice.ui.ProfileLoader;
 import uk.co.o2.android.helloroboguice.utils.Constants;
 
 
 public class MyActivity extends RoboActionBarActivity implements LoaderManager.LoaderCallbacks<Huddle>{
 
     @InjectView (R.id.friends_ViewPager)
-    ViewPager friendsViewPage;
+    private ViewPager friendsViewPage;
     @InjectResource (R.array.tabs_name)
     private String[] tabNames;
+
     @Inject
     protected EventManager eventManager;
+
+    private Button createButton;
+    private ImageButton backButton;
+
+    private FriendsArrayAdapter.OnNumberOfSelectionChanged onNumberOfSelectionChanged = new FriendsArrayAdapter.OnNumberOfSelectionChanged() {
+        @Override
+        public void selectionChanged(int selectedNumber) {
+            createButton.setEnabled(selectedNumber != 0);
+        }
+    };
 
     private Huddle globalHuddle;
 
@@ -69,6 +88,12 @@ public class MyActivity extends RoboActionBarActivity implements LoaderManager.L
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         actionBar.setDisplayShowHomeEnabled(false);
         actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowCustomEnabled(true);
+        View view = View.inflate(this,R.layout.actionbar_custom_layout,null);
+        createButton = (Button) view.findViewById(R.id.create_Button);
+        backButton = (ImageButton) view.findViewById(R.id.back_Button);
+        actionBar.setCustomView(view,new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
         ActionBar.Tab tab;
         for (int i = 0 ; i < 3; i++) {
             tab = actionBar.newTab()
@@ -76,6 +101,10 @@ public class MyActivity extends RoboActionBarActivity implements LoaderManager.L
                     .setTabListener((new FriendTabListener()));
             actionBar.addTab(tab);
         }
+    }
+
+    public FriendsArrayAdapter.OnNumberOfSelectionChanged getOnNumberOfSelectionChanged() {
+        return onNumberOfSelectionChanged;
     }
 
     @Override
@@ -93,6 +122,7 @@ public class MyActivity extends RoboActionBarActivity implements LoaderManager.L
             globalHuddle = huddle;
             eventManager.fire(huddle);
         }
+
     }
 
     @Override
